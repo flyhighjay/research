@@ -1,0 +1,22 @@
+from functools import lru_cache
+
+
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        @lru_cache
+        def check(r1, r2, r3):
+            if not r3:
+                return r1 == r2 == ''
+            if not r1:
+                return r2 == r3
+            if not r2:
+                return r1 == r3
+            
+            if r3[0] == r1[0] and r3[0] == r2[0]:
+                return check(r1[1:], r2, r3[1:]) or check(r1, r2[1:], r3[1:])
+            if r3[0] == r1[0]:
+                return check(r1[1:], r2, r3[1:])
+            if r3[0] == r2[0]:
+                return check(r1, r2[1:], r3[1:])
+            return False
+        return check(s1, s2, s3)
